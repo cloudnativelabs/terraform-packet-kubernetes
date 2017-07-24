@@ -1,0 +1,20 @@
+# Packet.net
+auth_token = "accesstokensecret"
+project_id = "project_id_here"
+
+## Machine
+## Defaults
+# nodename        = "node"
+# ipxe_script_url = "https://gitlab.com/cloudnativelabs/pxe/raw/master/packet/coreos-packet.ipxe"
+# server_type     = "baremetal_0"
+# facility        = "ewr1"
+
+## Bootkube
+controller_count = 1
+worker_count = 0
+## Defaults
+# cluster_name = "test"
+# k8s_domain_name = "test.kube-router.io"
+# asset_dir = "assets"
+# etcd_servers = []
+# experimental_self_hosted_etcd = "true"
