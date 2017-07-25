@@ -1,15 +1,15 @@
-# Koalesce
+# kube-metal
 
-Koalesce aims to be an end-to-end test-suite for Kubernetes software.
-We plan to implement a `go test` type tool for interacting with a
-temporary cluster.
+kube-metal is a [Terraform](https://www.terraform.io/) module that automates the creation of Kubernetes
+clusters and the infrastructure they run on.
 
-Using [Terraform](https://www.terraform.io/) you can quickly spin up Kubernetes
-clusters for CI and testing purposes.  Koalesce is designed to support testing
-core Kubernetes components such as kube-router. It also focuses on bare-metal
-clusters, although the provider should be easily swapped out.
+Using Terraform you can quickly spin up Kubernetes clusters for CI and testing
+purposes, or for permanent use. kube-metal is designed to support testing core
+Kubernetes components such as
+[kube-router](https://github.com/cloudnativelabs/kube-router). It also focuses
+on bare-metal clusters, although the provider should be easily swapped out.
 
-Koalesce currently only supports provisioning on [packet.net](https://www.packet.net)
+kube-metal currently only supports provisioning on [packet.net](https://www.packet.net)
 servers, although we plan to support other cloud providers and Vagrant very
 soon.
 
@@ -18,7 +18,7 @@ soon.
 Terraform is used to provision and configure kubernetes nodes, and also
 generate TLS secrets for etcd/Kubernetes. Kubernetes apiserver and etcd
 are exposed on a public address by default so that CI systems and you
-can interact with them. Although Koalesce services are only intented to
+can interact with them. Although kube-metal services are only intented to
 be operational for a short time, still these services are configured with TLS
 authentication/authorization to prevent unwanted access.
 
@@ -34,9 +34,9 @@ this is easily configured to use an etcd server outside of Kubernetes.
 ### Prerequisites
 
 We had to extend the capabilities of the packethost/packngo Go library
-as well as the terraform-provider-packet plugin to support Koalesce. So
+as well as the terraform-provider-packet plugin to support kube-metal. So
 until those changes are accepted upstream there are a few Terraform plugins
-that must be compiled on your system before using Koalesce.
+that must be compiled on your system before using kube-metal.
 
 Here's how to install the prequisites:
 - `go get github.com/bzub/terraform-provider-packet`
@@ -62,7 +62,7 @@ Terraform will use them for all commands.
 You will need to run `terraform init` to download the Terraform modules
 before proceeding.
 
-### Running Koalesce
+### Running kube-metal
 
 Running `terraform plan` will show you what will be created.
 Running `terraform apply` will actually create the resources. In brief,
