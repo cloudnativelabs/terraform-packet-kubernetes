@@ -3,11 +3,13 @@ resource "null_resource" "copy_secrets" {
   count = "${var.controller_count + var.worker_count}"
 
   connection {
-    type        = "ssh"
-    host        = "${element(packet_device.node.*.ipv4_public, count.index)}"
+    type = "ssh"
+    host = "${element(concat(packet_device.controller.*.ipv4_public,
+                                    packet_device.worker.*.ipv4_public), count.index)}"
+
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-    timeout     = "10m"
+    timeout     = "20m"
   }
 
   provisioner "remote-exec" {
@@ -70,14 +72,13 @@ resource "null_resource" "copy_secrets" {
       "sudo mv etcd-peer.key /etc/ssl/etcd/etcd/peer.key",
       "sudo chown -R etcd:etcd /etc/ssl/etcd",
       "sudo chmod -R 500 /etc/ssl/etcd",
-      "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
     ]
   }
 }
 
 # Secure copy bootkube assets to ONE controller and start bootkube to perform
 # one-time self-hosted cluster bootstrapping.
-resource "null_resource" "bootkube-start" {
+resource "null_resource" "bootkube_start" {
   # Without depends_on, this remote-exec may start before the kubeconfig copy.
   # Terraform only does one task at a time, so it would try to bootstrap
   # Kubernetes and Tectonic while no Kubelets are running. Ensure all nodes
@@ -86,10 +87,10 @@ resource "null_resource" "bootkube-start" {
 
   connection {
     type        = "ssh"
-    host        = "${packet_device.node.0.ipv4_public}"
+    host        = "${packet_device.controller.0.ipv4_public}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
-    timeout     = "10m"
+    timeout     = "20m"
   }
 
   provisioner "file" {
@@ -99,8 +100,50 @@ resource "null_resource" "bootkube-start" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
+      "sleep 15",
       "sudo mv /home/core/assets /opt/bootkube",
       "sudo systemctl start bootkube",
+    ]
+  }
+}
+
+# Start kubelet on the rest of the controllers.
+resource "null_resource" "cluster_start_controller" {
+  count      = "${var.controller_count - 1}"
+  depends_on = ["null_resource.bootkube_start"]
+
+  connection {
+    type        = "ssh"
+    host        = "${element(packet_device.controller.*.ipv4_public, count.index + 1)}"
+    user        = "core"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    timeout     = "20m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
+    ]
+  }
+}
+
+# Start kubelet on the workers.
+resource "null_resource" "cluster_start_worker" {
+  count      = "${var.worker_count}"
+  depends_on = ["null_resource.bootkube_start"]
+
+  connection {
+    type        = "ssh"
+    host        = "${element(packet_device.worker.*.ipv4_public, count.index)}"
+    user        = "core"
+    private_key = "${tls_private_key.ssh.private_key_pem}"
+    timeout     = "20m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
     ]
   }
 }

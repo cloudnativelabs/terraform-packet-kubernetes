@@ -12,12 +12,6 @@ variable "project_id" {
 }
 
 ## Machine
-variable nodename {
-  description = "Node hostname prefix."
-  type        = "string"
-  default     = "node"
-}
-
 variable ipxe_script_url {
   description = "URL that points to an iPXE script to boot."
   type        = "string"
