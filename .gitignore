@@ -1,3 +1,4 @@
 *.tfstate*
 *.tfvars
 .terraform
+assets/
