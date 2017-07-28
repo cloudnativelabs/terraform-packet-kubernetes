@@ -52,7 +52,7 @@ providers {
 
 ### Configuration
 
-When you run `terraform apply` you will be asked for an API key for your
+When you run `terraform plan` you will be asked for an API key for your
 hosting provider (if needed), and the number of nodes you want. There are
 more configuration options described in [variables.tf](/variables.tf). If you copy
 [terraform.tfvars-example](/terraform.tfvars-example) to a new file called
