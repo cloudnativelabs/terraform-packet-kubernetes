@@ -12,7 +12,8 @@ resource "packet_device" "controller" {
   operating_system = "custom_ipxe"
   billing_cycle    = "hourly"
   project_id       = "${var.project_id}"
-  user_data        = "${element(data.ct_config.controller.*.rendered, count.index)}"
+  /* user_data        = "${element(data.ct_config.controller.*.rendered, count.index)}" */
+  user_data        = "${data.ct_config.controller.*.rendered[count.index]}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = true
 }
@@ -27,7 +28,7 @@ resource "packet_device" "worker" {
   operating_system = "custom_ipxe"
   billing_cycle    = "hourly"
   project_id       = "${var.project_id}"
-  user_data        = "${element(data.ct_config.worker.*.rendered, count.index)}"
+  user_data        = "${data.ct_config.worker.*.rendered[count.index]}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = true
 }
@@ -42,15 +43,15 @@ resource "tls_private_key" "ssh" {
 }
 
 data "ct_config" "controller" {
-  count        = "${var.controller_count + var.worker_count}"
+  count        = "${var.controller_count}"
   pretty_print = true
-  content      = "${element(data.template_file.controller.*.rendered, count.index)}"
+  content      = "${data.template_file.controller.*.rendered[count.index]}"
 }
 
 data "ct_config" "worker" {
-  count        = "${var.controller_count + var.worker_count}"
+  count        = "${var.worker_count}"
   pretty_print = true
-  content      = "${element(data.template_file.worker.*.rendered, count.index)}"
+  content      = "${data.template_file.worker.*.rendered[count.index]}"
 }
 
 data "template_file" "controller" {
