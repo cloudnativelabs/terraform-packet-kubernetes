@@ -57,3 +57,21 @@ variable etcd_servers {
 variable experimental_self_hosted_etcd {
   default = true
 }
+
+## Customize Kubernetes components/addons
+variable use_kube_router {
+  default = true
+}
+
+variable kube_router {
+  type = "map"
+  default = {
+    pod_networking = true
+    service_proxy = true
+    network_policy = true
+  }
+}
+
+variable use_prometheus {
+  default = true
+}

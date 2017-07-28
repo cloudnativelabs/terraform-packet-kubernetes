@@ -17,4 +17,10 @@ worker_count = 0
 # k8s_domain_name = "test.kube-router.io"
 # asset_dir = "assets"
 # etcd_servers = []
-# experimental_self_hosted_etcd = "true"
+# experimental_self_hosted_etcd = true
+# use_kube_router = true
+# kube_router = {
+#   pod_networking = true
+#   service_proxy = true
+#   network_policy = true
+# }

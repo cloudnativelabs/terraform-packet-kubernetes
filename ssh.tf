@@ -83,7 +83,7 @@ resource "null_resource" "bootkube_start" {
   # Terraform only does one task at a time, so it would try to bootstrap
   # Kubernetes and Tectonic while no Kubelets are running. Ensure all nodes
   # receive a kubeconfig before proceeding with bootkube and tectonic.
-  depends_on = ["null_resource.copy_secrets"]
+  depends_on = ["null_resource.copy_secrets", "local_file.kube_router"]
 
   connection {
     type        = "ssh"
