@@ -139,6 +139,7 @@ systemd:
         ExecStart=/usr/sbin/btrfs subvolume create /DATA/kubernetes
         ExecStart=/usr/sbin/btrfs subvolume create /DATA/core
         ExecStart=/usr/sbin/btrfs subvolume create /DATA/kubelet
+        ExecStart=/usr/sbin/btrfs subvolume create /DATA/ssl-etcd
         ExecStart=/usr/bin/chown -R core:core /DATA/core
 
         [Install]
@@ -272,6 +273,32 @@ systemd:
 
         [Automount]
         Where=/etc/kubernetes
+
+        [Install]
+        WantedBy=local-fs.target
+        WantedBy=kubelet.service bootkube.service
+    - name: etc-ssl-etcd.mount
+      enable: true
+      contents: |
+        [Unit]
+        Before=kubelet.service bootkube.service
+
+        [Mount]
+        What=/dev/disk/by-label/DATA
+        Where=/etc/ssl/etcd
+        Type=btrfs
+        Options=compress=lzo,subvol=/ssl-etcd
+    - name: etc-ssl-etcd.automount
+      enable: true
+      contents: |
+        [Unit]
+        Wants=btrfs-create-subvolumes.service
+        After=DATA.mount
+        After=btrfs-create-subvolumes.service
+        Before=kubelet.service bootkube.service
+
+        [Automount]
+        Where=/etc/ssl/etcd
 
         [Install]
         WantedBy=local-fs.target
