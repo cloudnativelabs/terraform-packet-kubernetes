@@ -1,4 +1,4 @@
-# Secure copy etcd TLS assets and kubeconfig to all nodes. Activates kubelet.service
+# Secure copy etcd TLS assets and kubeconfig to all nodes.
 resource "null_resource" "copy_secrets" {
   count = "${var.controller_count + var.worker_count}"
 
@@ -124,6 +124,8 @@ resource "null_resource" "cluster_start_controller" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
+      "sudo systemctl start kubelet.service",
+      "sudo systemctl restart kubelet.path",
     ]
   }
 }
@@ -144,6 +146,8 @@ resource "null_resource" "cluster_start_worker" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
+      "sudo systemctl start kubelet.service",
+      "sudo systemctl restart kubelet.path",
     ]
   }
 }
