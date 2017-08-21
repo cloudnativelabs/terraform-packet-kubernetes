@@ -103,6 +103,8 @@ resource "null_resource" "bootkube_start" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv /home/core/kubeconfig /etc/kubernetes/kubeconfig",
+      "sudo systemctl start kubelet.service",
+      "sudo systemctl restart kubelet.path",
       "sleep 15",
       "sudo mv /home/core/assets /opt/bootkube",
       "sudo systemctl start bootkube",
