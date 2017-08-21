@@ -1,3 +1,9 @@
+# Write private SSH key to file for e2e, etc
+resource "local_file" "ssh_key_private" {
+  content  = "${tls_private_key.ssh.private_key_pem}"
+  filename = "${path.module}/assets/auth/id_rsa"
+}
+
 # Secure copy etcd TLS assets and kubeconfig to all nodes.
 resource "null_resource" "copy_secrets" {
   count = "${var.controller_count + var.worker_count}"
