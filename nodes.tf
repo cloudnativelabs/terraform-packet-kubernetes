@@ -6,7 +6,7 @@ resource "packet_device" "controller" {
   depends_on = ["packet_ssh_key.ssh"]
   count      = "${var.controller_count}"
 
-  hostname         = "${format("controller-%02d", count.index + 1)}"
+  hostname         = "${format("controller-%02d", count.index + 1)}.${var.server_domain}"
   plan             = "${var.server_type}"
   facility         = "${var.facility}"
   operating_system = "custom_ipxe"

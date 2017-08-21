@@ -36,13 +36,15 @@ variable worker_count {
   type        = "string"
 }
 
+variable server_domain {
+  description = "Domain to append to server hostnames."
+  type        = "string"
+  default     = "localdomain"
+}
+
 ## Bootkube
 variable cluster_name {
   default = "test"
-}
-
-variable k8s_domain_name {
-  default = "test.kube-router.io"
 }
 
 variable asset_dir {
