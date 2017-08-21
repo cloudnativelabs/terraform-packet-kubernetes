@@ -12,7 +12,6 @@ resource "packet_device" "controller" {
   operating_system = "custom_ipxe"
   billing_cycle    = "hourly"
   project_id       = "${var.project_id}"
-  /* user_data        = "${element(data.ct_config.controller.*.rendered, count.index)}" */
   user_data        = "${data.ct_config.controller.*.rendered[count.index]}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = true

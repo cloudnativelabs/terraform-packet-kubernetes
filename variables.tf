@@ -15,7 +15,7 @@ variable "project_id" {
 variable ipxe_script_url {
   description = "URL that points to an iPXE script to boot."
   type        = "string"
-  default     = "https://gitlab.com/cloudnativelabs/pxe/raw/master/packet/coreos-packet.ipxe"
+  default     = "https://gitlab.com/cloudnativelabs/pxe/raw/master/packet/coreos-alpha-packet.ipxe"
 }
 
 variable server_type {
