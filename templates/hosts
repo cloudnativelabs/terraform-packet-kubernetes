@@ -17,5 +17,4 @@
 127.0.0.1       localhost
 ::1             localhost                            
 
-${apiserver_ip} ${apiserver_hostname} ${apiserver_fqdn}
-
+${node_hosts_entries}

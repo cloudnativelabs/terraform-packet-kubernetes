@@ -1,10 +1,16 @@
 data "template_file" "hosts" {
-  template = "${file("${path.module}/templates/hosts")}"
+  template   = "${file("${path.module}/templates/hosts")}"
 
   vars {
-    apiserver_ip       = "${packet_device.controller.0.ipv4_public}"
-    apiserver_hostname = "${packet_device.controller.0.hostname}"
-    apiserver_fqdn     = "${packet_device.controller.0.hostname}.${var.k8s_domain_name}"
-    /* apiserver_entries  = "${formatlist(packet_device.controller_nodes.*.hostname)} */
+    node_hosts_entries = "${join("\n",
+                        formatlist("%v %v %v",
+                          concat(packet_device.controller.*.ipv4_public,
+                                  packet_device.worker.*.ipv4_public),
+                          concat(packet_device.controller.*.hostname,
+                                  packet_device.worker.*.hostname),
+                          formatlist("%v.%v",
+                            concat(packet_device.controller.*.hostname,
+                                    packet_device.worker.*.hostname),
+                                    var.server_domain)))}"
   }
 }

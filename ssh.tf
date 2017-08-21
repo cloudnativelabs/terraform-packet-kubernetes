@@ -63,6 +63,8 @@ resource "null_resource" "copy_secrets" {
     inline = [
       "sudo mkdir -p /etc/ssl/etcd/etcd",
       "sudo mkdir -p /etc/kubernetes",
+      "echo nameserver 127.0.0.53 | sudo tee -a /etc/kubernetes/resolv.conf",
+      "echo search ${var.server_domain} | sudo tee -a /etc/kubernetes/resolv.conf",
       "sudo mv etcd-client* /etc/ssl/etcd/",
       "sudo cp /etc/ssl/etcd/etcd-client-ca.crt /etc/ssl/etcd/etcd/server-ca.crt",
       "sudo mv etcd-server.crt /etc/ssl/etcd/etcd/server.crt",
