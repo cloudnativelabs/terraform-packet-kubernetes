@@ -47,6 +47,10 @@ variable cluster_name {
   default = "test"
 }
 
+variable kubernetes_version {
+  default = "v1.7"
+}
+
 variable asset_dir {
   default = "assets"
 }
