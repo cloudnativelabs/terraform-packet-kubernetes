@@ -3,7 +3,7 @@ output "api_ip" {
 }
 
 output "kubeconfig_path" {
-  value = "${path.module}/assets/auth/kubeconfig"
+  value = "${path.module}/${var.asset_dir}/auth/kubeconfig"
 }
 
 output "kube_version_minor" {
