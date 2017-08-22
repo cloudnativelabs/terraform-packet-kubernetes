@@ -1,5 +1,5 @@
 module "bootkube" {
-  source = "git://github.com/cloudnativelabs/bootkube-terraform.git?ref=v0.6.1"
+  source = "git://github.com/cloudnativelabs/bootkube-terraform.git?ref=kube-metal-v6"
 
   cluster_name = "${var.cluster_name}"
 
