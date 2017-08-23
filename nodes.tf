@@ -21,7 +21,7 @@ resource "packet_device" "worker" {
   depends_on = ["packet_ssh_key.ssh"]
   count      = "${var.worker_count}"
 
-  hostname         = "${format("worker-%02d", count.index + 1)}"
+  hostname         = "${format("worker-%02d", count.index + 1)}.${var.server_domain}"
   plan             = "${var.server_type}"
   facility         = "${var.facility}"
   operating_system = "custom_ipxe"
