@@ -1,5 +1,9 @@
 output "api_ip" {
-  value = "${packet_device.controller.0.ipv4_public}"
+  value = "${lookup(packet_device.controller.0.network[0], "address")}"
+}
+
+output "api_hostname" {
+  value = "${packet_device.controller.0.hostname}"
 }
 
 output "kubeconfig_path" {
@@ -14,18 +18,6 @@ output "kube_version_patch" {
   value = "${null_resource.cluster_facts.triggers.kubernetes_v_patch}"
 }
 
-output "controller_hostnames" {
-  value = "${packet_device.controller.*.hostname}"
-}
-
-output "controller_ips" {
-  value = "${packet_device.controller.*.ipv4_public}"
-}
-
-output "worker_hostnames" {
-  value = "${packet_device.worker.*.hostname}"
-}
-
-output "worker_ips" {
-  value = "${packet_device.worker.*.ipv4_public}"
+output "hosts_file_entries" {
+  value = "${join("\n",data.template_file.hosts_entries.*.rendered)}"
 }
