@@ -11,11 +11,11 @@ output "kubeconfig_path" {
 }
 
 output "kube_version_minor" {
-  value = "${null_resource.cluster_facts.triggers.kubernetes_v_minor}"
+  value = "${null_resource.kubernetes_facts.triggers.kubernetes_v_minor}"
 }
 
 output "kube_version_patch" {
-  value = "${null_resource.cluster_facts.triggers.kubernetes_v_patch}"
+  value = "${null_resource.kubernetes_facts.triggers.kubernetes_v_patch}"
 }
 
 output "hosts_file_entries" {
