@@ -5,7 +5,7 @@ project_id = "project_id_here"
 ## Machine
 ## Defaults
 # nodename        = "node"
-# ipxe_script_url = "https://gitlab.com/cloudnativelabs/pxe/raw/master/packet/coreos-packet.ipxe"
+# ipxe_script_url = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
 # server_type     = "baremetal_0"
 # facility        = "ewr1"
 
