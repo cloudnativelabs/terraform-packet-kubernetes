@@ -10,8 +10,7 @@ resource "null_resource" "copy_secrets" {
 
   connection {
     type = "ssh"
-    host = "${element(concat(packet_device.controller.*.ipv4_public,
-                                    packet_device.worker.*.ipv4_public), count.index)}"
+    host = "${lookup(module.all_networks.list[count.index * 3], "address")}"
 
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
@@ -21,7 +20,7 @@ resource "null_resource" "copy_secrets" {
   provisioner "remote-exec" {
     inline = [
       "sudo cp /etc/hosts /etc/hosts-backup-$(date --utc --iso-8601=seconds)",
-      "echo '${data.template_file.hosts.rendered}' | sudo tee /etc/hosts",
+      "echo '${join("\n",data.template_file.hosts_entries.*.rendered)}' | sudo tee -a /etc/hosts",
     ]
   }
 
@@ -95,7 +94,7 @@ resource "null_resource" "bootkube_start" {
 
   connection {
     type        = "ssh"
-    host        = "${packet_device.controller.0.ipv4_public}"
+    host        = "${lookup(packet_device.controller.network[0], "address")}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -125,7 +124,7 @@ resource "null_resource" "cluster_start_controller" {
 
   connection {
     type        = "ssh"
-    host        = "${element(packet_device.controller.*.ipv4_public, count.index + 1)}"
+    host        = "${lookup(module.all_networks.list[(count.index + 1) * 3], "address")}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -147,7 +146,7 @@ resource "null_resource" "cluster_start_worker" {
 
   connection {
     type        = "ssh"
-    host        = "${element(packet_device.worker.*.ipv4_public, count.index)}"
+    host        = "${lookup(module.all_networks.list[(count.index + var.controller_count) * 3], "address")}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
