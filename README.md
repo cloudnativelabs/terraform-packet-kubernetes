@@ -11,16 +11,26 @@ Kubernetes components such as
 ## Quickstart
 kube-metal is highly configurable, but you can get going right away by running:
 ```
+# Get extra terraform providers
 go get github.com/coreos/terraform-provider-ct
 echo 'providers { ct = "${GOPATH}/bin/terraform-provider-ct" }' \
   >> ~/terraformrc
+
+# Provision the cluster on Packet.net.
+# Be sure to have an account and API key created first.
 terraform init
 terraform apply
+
+# Update your hosts file for DNS resolution of the API controller
+./etc-hosts.sh
+
+# Enjoy!
+./kubectl.sh get nodes
+./kubectl.sh get pods --all-namespaces -o wide
 ```
 
-You will be asked to provide a few fields like an API key, project ID, etc, then
-you're off! Follow the [cluster access section](#accessing-the-cluster) to use
-your new cluster.
+This is perfect for scripting clusters for CI or demos. Read the
+[getting started docs](#getting-started) for more detailed provisioning steps.
 
 ## How It Works
 
@@ -92,10 +102,18 @@ it will:
 #### /etc/hosts DNS Setup
 Due to the TLS security mechanisms in place, you must access a kube-metal
 provisioned cluster via the DNS name that was given to the controller node.
-Luckily you will find host entries in the terraform output that you can copy and
-paste into your /etc/hosts file.
 
-For example:
+A script is provided that will add/replace the hosts file entry for you.
+```sh
+$ ./etc-hosts.sh
+147.75.77.43 controller-01.test.kube-router.io
+INFO: Removing above host file entry.
+INFO: Appending the following host entry to your hosts file.
+147.75.77.43 controller-01.test.kube-router.io
+```
+
+Alternatively you can use the host entries in the terraform output to manually
+update your hosts file or DNS server.
 ```sh
 # Get the hosts file entries and append them to /etc/hosts
 terraform output hosts_file_entries | sudo tee -a /etc/hosts
