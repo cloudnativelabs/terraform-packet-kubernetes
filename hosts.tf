@@ -3,8 +3,11 @@ data "template_file" "hosts_entries" {
   template = "$${hosts_entries}"
 
   vars {
-    hosts_entries = "${format("%v %v",
+    hosts_entries = "${format("%v %v %v",
                         lookup(module.all_networks.list[count.index * 3], "address"),
+                        replace(element(concat(packet_device.controller.*.hostname,
+                                packet_device.worker.*.hostname), count.index),
+                                format("%v%v",".",var.server_domain), ""),
                         element(concat(packet_device.controller.*.hostname,
                                 packet_device.worker.*.hostname), count.index))}"
   }
