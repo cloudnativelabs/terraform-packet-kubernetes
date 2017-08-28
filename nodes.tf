@@ -15,6 +15,9 @@ resource "packet_device" "controller" {
   user_data        = "${data.ct_config.controller.*.rendered[count.index]}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = true
+  spot_instance    = "${var.spot_instance}"
+  spot_price_max   = "${var.spot_price_max}"
+  termination_time = "${var.termination_time}"
 }
 
 resource "packet_device" "worker" {
@@ -30,6 +33,9 @@ resource "packet_device" "worker" {
   user_data        = "${data.ct_config.worker.*.rendered[count.index]}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = true
+  spot_instance    = "${var.spot_instance}"
+  spot_price_max   = "${var.spot_price_max}"
+  termination_time = "${var.termination_time}"
 }
 
 resource "packet_ssh_key" "ssh" {

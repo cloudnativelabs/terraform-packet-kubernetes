@@ -1,6 +1,9 @@
 # Packet.net
 auth_token = "accesstokensecret"
 project_id = "project_id_here"
+# spot_instance = "false"
+# spot_price_max = ""
+# termination_time = ""
 
 ## Machine
 ## Defaults
@@ -8,6 +11,7 @@ project_id = "project_id_here"
 # ipxe_script_url = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
 # server_type     = "baremetal_0"
 # facility        = "ewr1"
+# server_domain   = "localdomain"
 
 ## Bootkube
 controller_count = 1

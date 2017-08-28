@@ -11,6 +11,24 @@ variable "project_id" {
   type        = "string"
 }
 
+variable "spot_instance" {
+  description = "Set to true to create a spot instance. See: https://help.packet.net/technical/deployment-options/spot-market"
+  type        = "string"
+  default     = "false"
+}
+
+variable "spot_price_max" {
+  description = "The bid price for your spot_instance."
+  type        = "string"
+  default     = ""
+}
+
+variable "termination_time" {
+  description = "A predetermined time to delete your spot_instance."
+  type        = "string"
+  default     = ""
+}
+
 ## Machine
 variable ipxe_script_url {
   description = "URL that points to an iPXE script to boot."
@@ -71,9 +89,10 @@ variable use_kube_router {
 
 variable kube_router {
   type = "map"
+
   default = {
     pod_networking = true
-    service_proxy = true
+    service_proxy  = true
     network_policy = true
   }
 }
