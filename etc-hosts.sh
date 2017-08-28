@@ -24,10 +24,10 @@ fi
 
 if grep -F "${api_hostname}" "${HOSTS_FILE}"; then
     echo "INFO: Removing above host file entry."
-    "${SUDO}" sed -i "/${api_hostname}/d" "${HOSTS_FILE}"
+    eval "${SUDO}" sed -i "/${api_hostname}/d" "${HOSTS_FILE}"
 else
     echo "INFO: ${api_hostname} not found in hosts file."
 fi
 
 echo "INFO: Appending the following host entry to your hosts file."
-echo "${hosts_entry}" | "${SUDO}" tee -a "${HOSTS_FILE}"
+echo "${hosts_entry}" | eval "${SUDO}" tee -a "${HOSTS_FILE}"
