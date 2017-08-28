@@ -16,7 +16,7 @@ kube-metal is highly configurable, but you can get going right away by running:
 # Get extra terraform providers
 go get github.com/coreos/terraform-provider-ct
 echo 'providers { ct = "${GOPATH}/bin/terraform-provider-ct" }' \
-  >> ~/terraformrc
+  >> ~/.terraformrc
 
 # Provision the cluster on Packet.net.
 # Be sure to have an account and API key created first.
