@@ -30,10 +30,23 @@ variable "termination_time" {
 }
 
 ## Machine
+variable operating_system {
+  description = "The operating system to provision servers with."
+  type        = "string"
+  default     = "coreos_stable"
+}
+
 variable ipxe_script_url {
   description = "URL that points to an iPXE script to boot."
   type        = "string"
-  default     = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
+  # default     = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
+  default     = ""
+}
+
+variable always_pxe {
+  description = "If true then the servers will boot via iPXE on reboots."
+  type        = "string"
+  default     = "false"
 }
 
 variable server_type {
@@ -45,12 +58,12 @@ variable facility {
 }
 
 variable controller_count {
-  description = "How many kubernetes controller nodes you want."
+  description = "How many kubernetes controller servers to create."
   type        = "string"
 }
 
 variable worker_count {
-  description = "How many kubernetes worker nodes you want."
+  description = "How many kubernetes worker servers to create."
   type        = "string"
 }
 
