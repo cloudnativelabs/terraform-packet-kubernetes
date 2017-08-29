@@ -24,7 +24,10 @@ fi
 
 if grep -F "${api_hostname}" "${HOSTS_FILE}"; then
     echo "INFO: Removing above host file entry."
-    eval "${SUDO}" sed -i "/${api_hostname}/d" "${HOSTS_FILE}"
+    cp /etc/hosts /tmp/kube-metal-hosts
+    eval "${SUDO}" sed -i "/${api_hostname}/d" /tmp/kube-metal-hosts
+    cp -f /tmp/kube-metal-hosts "${HOSTS_FILE}"
+    rm /tmp/kube-metal-hosts
 else
     echo "INFO: ${api_hostname} not found in hosts file."
 fi
