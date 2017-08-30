@@ -115,6 +115,13 @@ resource "null_resource" "bootkube_start" {
       "sudo systemctl start bootkube",
     ]
   }
+
+  # Delay a bit to let things settle.
+  # Brought on by scripts that use this TF module and failed when
+  # trying to create resources immediately after startup.
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
 }
 
 # Start kubelet on the rest of the controllers.
