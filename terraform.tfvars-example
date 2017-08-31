@@ -1,13 +1,13 @@
 # Packet.net
-auth_token = "accesstokensecret"
-project_id = "project_id_here"
+auth_token = "changeme"
+project_id = "changeme"
 # spot_instance = "false"
 # spot_price_max = ""
 # termination_time = ""
 
 ## Machine
 ## Defaults
-# nodename        = "node"
+# operating_system = "custom_ipxe"
 # ipxe_script_url = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
 # server_type     = "baremetal_0"
 # facility        = "ewr1"

@@ -33,20 +33,19 @@ variable "termination_time" {
 variable operating_system {
   description = "The operating system to provision servers with."
   type        = "string"
-  default     = "coreos_stable"
+  default     = "custom_ipxe"
 }
 
 variable ipxe_script_url {
   description = "URL that points to an iPXE script to boot."
   type        = "string"
-  # default     = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
-  default     = ""
+  default     = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
 }
 
 variable always_pxe {
   description = "If true then the servers will boot via iPXE on reboots."
   type        = "string"
-  default     = "false"
+  default     = "true"
 }
 
 variable server_type {
