@@ -17,7 +17,7 @@ resource "packet_device" "controller" {
   always_pxe       = "${var.always_pxe}"
   spot_instance    = "${var.spot_instance}"
   spot_price_max   = "${var.spot_price_max}"
-  termination_time = "${var.termination_time}"
+  /* termination_time = "${var.termination_time}" */
 }
 
 resource "packet_device" "worker" {
@@ -35,7 +35,7 @@ resource "packet_device" "worker" {
   always_pxe       = "${var.always_pxe}"
   spot_instance    = "${var.spot_instance}"
   spot_price_max   = "${var.spot_price_max}"
-  termination_time = "${var.termination_time}"
+  /* termination_time = "${var.termination_time}" */
 }
 
 resource "packet_ssh_key" "ssh" {

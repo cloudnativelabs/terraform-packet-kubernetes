@@ -23,11 +23,11 @@ variable "spot_price_max" {
   default     = ""
 }
 
-variable "termination_time" {
-  description = "A predetermined time to delete your spot_instance."
-  type        = "string"
-  default     = ""
-}
+# variable "termination_time" {
+#   description = "A predetermined time to delete your spot_instance."
+#   type        = "string"
+#   default     = ""
+# }
 
 ## Machine
 variable operating_system {
