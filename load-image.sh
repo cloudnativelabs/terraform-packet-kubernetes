@@ -4,6 +4,7 @@ set -ex
 script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 terraform_output="terraform output --state=${script_dir}/terraform.tfstate"
 node_ips="$(eval "${terraform_output} node_public_ipv4")"
+ssh_args="-i ${script_dir}/assets/auth/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 [ -z "${NODE_USER}" ] && NODE_USER="core"
 
@@ -26,9 +27,7 @@ upload_image() {
         ssh "${NODE_USER}@${node_ip}" "mkdir -p /var/tmp/images"
         rsync -avz \
             -e \
-            "ssh -i ${script_dir}/assets/auth/id_rsa \
-            -o StrictHostKeyChecking=no \
-            -o UserKnownHostsFile=/dev/null" \
+            "ssh ${ssh_args}" \
             "${image_file}" "${NODE_USER}@${node_ip}:/var/tmp/images/"
     done || return 1
     return 0
@@ -45,7 +44,8 @@ load_image() {
         upload_image "${image}" || exit 1
         echo "INFO: Loading ${image_filename} into all nodes' rkt image store"
         for node_ip in ${node_ips}; do
-            ssh "${NODE_USER}@${node_ip}" \
+            ssh ${ssh_args} \
+                "${NODE_USER}@${node_ip}" \
                 "sudo rkt \
                     --insecure-options=image \
                     fetch /var/tmp/images/${image_filename}"
@@ -58,7 +58,8 @@ load_image() {
         upload_image "${image}" || exit 1
         echo "INFO: Loading ${image_filename} into all nodes' docker image store"
         for node_ip in ${node_ips}; do
-            ssh "${NODE_USER}@${node_ip}" \
+            ssh ${ssh_args} \
+                "${NODE_USER}@${node_ip}" \
                 "docker load -i /var/tmp/images/${image_filename}"
         done || exit 1
         return 0
