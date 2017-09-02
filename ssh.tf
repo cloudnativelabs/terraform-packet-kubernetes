@@ -2,6 +2,10 @@
 resource "local_file" "ssh_key_private" {
   content  = "${tls_private_key.ssh.private_key_pem}"
   filename = "${path.module}/assets/auth/id_rsa"
+
+  provisioner "local-exec" {
+    command = "chmod 600 ${path.module}/assets/auth/id_rsa"
+  }
 }
 
 # Secure copy etcd TLS assets and kubeconfig to all nodes.
