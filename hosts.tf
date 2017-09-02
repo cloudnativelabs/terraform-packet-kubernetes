@@ -1,19 +1,19 @@
-data "template_file" "hosts_entries" {
+resource "null_resource" "hosts" {
   count    = "${var.controller_count + var.worker_count}"
-  template = "$${hosts_entries}"
-
-  vars {
-    hosts_entries = "${format("%v %v %v",
-                        lookup(module.all_networks.list[count.index * 3], "address"),
-                        replace(element(concat(packet_device.controller.*.hostname,
-                                packet_device.worker.*.hostname), count.index),
-                                format("%v%v",".",var.server_domain), ""),
-                        element(concat(packet_device.controller.*.hostname,
-                                packet_device.worker.*.hostname), count.index))}"
+  triggers {
+    entries = "${format("%v %v %v",
+      element(concat(packet_device.controller.*.access_public_ipv4, packet_device.worker.*.access_public_ipv4), count.index),
+      replace(
+        element(concat(packet_device.controller.*.hostname,packet_device.worker.*.hostname), count.index),
+        format("%v%v",".",var.server_domain), ""),
+      element(concat(packet_device.controller.*.hostname,packet_device.worker.*.hostname), count.index))}"
   }
 }
 
-module "all_networks" {
-  source = "./flatten"
-  list   = "${concat(packet_device.controller.*.network[0], packet_device.worker.*.network[0])}"
+resource "null_resource" "net" {
+  count = "${var.controller_count + var.worker_count}"
+
+  triggers {
+    public_ipv4 = "${element(concat(packet_device.controller.*.access_public_ipv4, packet_device.worker.*.access_public_ipv4), count.index)}"
+  }
 }

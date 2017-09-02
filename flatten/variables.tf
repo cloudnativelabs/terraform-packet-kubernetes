@@ -1,3 +1,0 @@
-variable "list" {
-  type        = "list"
-}

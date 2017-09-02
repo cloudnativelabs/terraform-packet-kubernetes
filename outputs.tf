@@ -6,6 +6,10 @@ output "api_hostname" {
   value = "${packet_device.controller.0.hostname}"
 }
 
+output "node_public_ipv4" {
+  value = "${join("\n",null_resource.net.*.triggers.public_ipv4)}"
+}
+
 output "kubeconfig_path" {
   value = "${path.module}/${var.asset_dir}/auth/kubeconfig"
 }
@@ -19,5 +23,5 @@ output "kube_version_patch" {
 }
 
 output "hosts_file_entries" {
-  value = "${join("\n",data.template_file.hosts_entries.*.rendered)}"
+  value = "${join("\n",null_resource.hosts.*.triggers.entries)}"
 }
