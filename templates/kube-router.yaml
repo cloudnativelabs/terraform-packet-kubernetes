@@ -35,7 +35,7 @@ spec:
       containers:
       - name: kube-router
         image: cloudnativelabs/kube-router-git:master
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         args:
         - --run-router=${pod_networking}
         - --run-firewall=${network_policy}
