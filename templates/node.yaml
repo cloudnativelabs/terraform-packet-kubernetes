@@ -399,6 +399,7 @@ storage:
         inline: |
           KUBELET_IMAGE_URL=quay.io/coreos/hyperkube
           KUBELET_IMAGE_TAG=v${kubernetes_v_patch}_coreos.0
+          KUBELET_IMAGE_TAG=v1.7.5_coreos.0
     - path: /etc/hostname
       filesystem: root
       mode: 0644
