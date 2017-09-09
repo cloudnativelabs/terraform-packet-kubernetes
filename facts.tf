@@ -1,7 +1,7 @@
 resource "null_resource" "kubernetes_facts" {
   triggers {
-    kubernetes_v_minor = "${replace(data.http.kubernetes-version.body,"/^.*v?(\\d\\.\\d)\\.\\d/","$1")}"
-    kubernetes_v_patch = "${replace(data.http.kubernetes-version.body,"/^.*v?(\\d\\.\\d\\.\\d)/","$1")}"
+    kubernetes_v_minor = "${chomp(replace(data.http.kubernetes-version.body,"/^.*v?(\\d\\.\\d)\\.\\d/","$1"))}"
+    kubernetes_v_patch = "${chomp(replace(data.http.kubernetes-version.body,"/^.*v?(\\d\\.\\d\\.\\d)/","$1"))}"
   }
 }
 
