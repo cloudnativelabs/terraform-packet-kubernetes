@@ -33,7 +33,7 @@ resource "packet_device" "worker" {
 }
 
 resource "packet_ssh_key" "ssh" {
-  name       = "matchbox"
+  name       = "kube-metal.${var.server_domain}"
   public_key = "${tls_private_key.ssh.public_key_openssh}"
 }
 
