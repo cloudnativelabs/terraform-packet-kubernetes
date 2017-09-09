@@ -60,6 +60,7 @@ data "template_file" "controller" {
   vars {
     node_name   = "${format("controller-%02d", count.index + 1)}"
     node_labels = "node-role.kubernetes.io/master"
+    kubernetes_v_patch = "${null_resource.kubernetes_facts.triggers.kubernetes_v_patch}"
   }
 }
 
@@ -70,5 +71,6 @@ data "template_file" "worker" {
   vars {
     node_name   = "${format("worker-%02d", count.index + 1)}"
     node_labels = ""
+    kubernetes_v_patch = "${null_resource.kubernetes_facts.triggers.kubernetes_v_patch}"
   }
 }
