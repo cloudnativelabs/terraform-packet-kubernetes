@@ -28,7 +28,7 @@ systemd:
     - name: locksmithd.service
       mask: true
     - name: wait-for-dns.service
-      enable: true
+      enable: false
       contents: |
         [Unit]
         Description=Wait for DNS entries
