@@ -2,9 +2,10 @@
 set -ex
 
 script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
-terraform_output="terraform output --state=${script_dir}/terraform.tfstate"
+tf_dir="$(dirname ${script_dir})"
+terraform_output="terraform output --state=${tf_dir}/terraform.tfstate"
 node_ips="$(eval "${terraform_output} node_public_ipv4")"
-ssh_args="-i ${script_dir}/assets/auth/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ssh_args="-i ${tf_dir}/assets/auth/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 [ -z "${NODE_USER}" ] && NODE_USER="core"
 

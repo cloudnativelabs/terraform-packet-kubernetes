@@ -11,7 +11,8 @@ fi
 [ -z "${FORMAT}" ] && FORMAT="hosts-file"
 
 script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
-terraform_output="terraform output --state=${script_dir}/terraform.tfstate"
+tf_dir="$(dirname ${script_dir})"
+terraform_output="terraform output --state=${tf_dir}/terraform.tfstate"
 hosts_entry="$(eval "${terraform_output} hosts_file_entries | head -n1")"
 api_hostname="$(eval "${terraform_output} api_hostname")"
 api_ip="$(eval "${terraform_output} api_ip")"
