@@ -11,24 +11,45 @@ Kubernetes components such as
 [kube-router](https://github.com/cloudnativelabs/kube-router).
 
 ## Quickstart
-kube-metal is highly configurable, but you can get going right away by running:
-```
-# Get extra terraform providers
-go get github.com/coreos/terraform-provider-ct
-echo 'providers { ct = "${GOPATH}/bin/terraform-provider-ct" }' \
-  >> ~/.terraformrc
+kube-metal is highly configurable, but you can try it out in a few short steps.
 
-# Provision the cluster on Packet.net.
-# Be sure to have an account and API key created first.
+Get kube-metal:
+```sh
+git clone https://github.com/cloudnativelabs/kube-metal.git
+cd kube-metal
+```
+
+Use the [get-providers.sh](/tools/get-providers.sh) script to download and configure Terraform providers:
+```sh
+tools/get-providers.sh
+```
+
+Make sure you have a `~/.terraformrc` that uses the new provider binaries. You
+can run the following:
+```sh
+cat <<EOF > ~/.terraformrc
+providers {                                          
+  ct = "${GOPATH}/bin/terraform-provider-ct"         
+  packet = "${GOPATH}/bin/terraform-provider-packet" 
+}
+EOF
+```
+
+Provision the cluster on Packet.net. Be sure to have an account and API key created first.
+```sh
 terraform init
 terraform apply
+```
 
-# Update your hosts file for DNS resolution of the API controller
-./etc-hosts.sh
+Update your hosts file for DNS resolution of the API controller
+```sh
+./tools/etc-hosts.sh
+```
 
-# Enjoy!
-./kubectl.sh get nodes
-./kubectl.sh get pods --all-namespaces -o wide
+Enjoy!
+```sh
+./tools/kubectl.sh get nodes
+./tools/kubectl.sh get pods --all-namespaces -o wide
 ```
 
 This is perfect for scripting clusters for CI or demos. Read the
@@ -55,39 +76,37 @@ instructions](#quickstart).
 
 ### Prerequisites
 
-terraform-provider-ct is not yet included in the official providers, so you have
-to download that manually.
+kube-metal uses a few unreleased features from Terraform providers. You can get
+them automatically with the provided [get-providers.sh](/tools/get-providers.sh)
+script.
 
 ```sh
-# Here's how to install the prequisites:
-go get github.com/coreos/terraform-provider-ct
+tools/get-providers.sh
 ```
 
 Then create a file `~/terraformrc` and add the following:
 ```
-providers {
-  ct = "${GOPATH}/bin/terraform-provider-ct"
+providers {                                          
+  ct = "${GOPATH}/bin/terraform-provider-ct"         
+  packet = "${GOPATH}/bin/terraform-provider-packet" 
 }
 ```
 
 ### Configuration
 
-When you run `terraform plan` you will be asked for an API key for your
-hosting provider (if needed), and the number of nodes you want. There are
-more configuration options described in [variables.tf](/variables.tf). If you copy
-[terraform.tfvars-example](/terraform.tfvars-example) to a new file called
-`terraform.tfvars` then you can make your configuration changes persistent and
-Terraform will use them for all commands.
+There are many configuration options described in [variables.tf](/variables.tf).
+If you copy [terraform.tfvars-example](/terraform.tfvars-example) to a new file
+called `terraform.tfvars` then you can make your configuration changes
+persistent and Terraform will use them for all commands.
 
-You will need to run `terraform init` to download the Terraform modules
-before proceeding.
+You will need to run `terraform init` before proceeding which downloads
+Terraform modules, and sets up the file backend store (`terraform.tfstate`).
 
 ### Running kube-metal
 
 Running `terraform plan` will show you what will be created.
 Running `terraform apply` will actually create the resources. In brief,
 it will:
-
 - Create an SSH key for itself and your CI system that will allow shell
   access to the nodes.
 - Boot your new nodes which get configured from a Container Linux Config
@@ -121,11 +140,30 @@ update your hosts file or DNS server.
 terraform output hosts_file_entries | sudo tee -a /etc/hosts
 ```
 
+To see all available output variables run `terraform output`.
+
 #### kubectl.sh
 We've included a convenient [kubectl.sh](/kubectl.sh) wrapper that runs kubectl
 with all the options needed to access your cluster baked right in.
-```
+```sh
 ./kubectl.sh get pods --all-namespaces
+```
+
+The kubeconfig is available under `assets/auth/kubeconfig` for use with the
+usual kubectl command.
+```sh
+# Backup a previous kubeconfig
+mv ~/.kube/config ~/.kube/config-$(date --utc --iso-8601=seconds)
+
+# Go into the kube-metal directory
+cd kube-metal
+
+# Option 1
+ln -s "${PWD}/assets/auth/kubeconfig" ~/.kube/config
+kubectl get nodes
+
+# Option 2
+KUBECONFIG="${PWD}/assets/auth/kubeconfig" kubectl get nodes
 ```
 
 ## Cleaning Up
