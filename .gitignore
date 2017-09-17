@@ -1,4 +1,5 @@
 *.tfstate*
-*.tfvars
+*.tfvars*
+!terraform.tfvars-example
 .terraform
 assets/
