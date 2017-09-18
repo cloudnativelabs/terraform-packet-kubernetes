@@ -5,6 +5,8 @@ if [ ! -d "${GOPATH}" ]; then
     echo "ERROR: GOPATH is not set up. Do you have a functional Go workspace?"
 fi
 
+CGO_ENABLED=0
+
 set_provider_vars() {
     for i in ${@}; do
         provider_go_urls="${provider_go_urls} ${i}"
