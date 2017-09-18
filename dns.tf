@@ -1,17 +1,13 @@
-provider "kubernetes" {
-  config_path = "${var.asset_dir}/auth/test-config}"
-  config_context = "test-context"
+data "template_file" "kube_dns_cfg" {
+  template = "${file("${path.module}/templates/kube-dns-cfg.yaml")}"
+
+  vars {
+    server_domain = "${var.server_domain}"
+  }
 }
 
-resource "kubernetes_config_map" "kube_dns" {
-  metadata {
-    name = "kube-dns"
-    namespace = "kube-system"
-  }
-
-  data {
-    upstreamNameservers = <<EOF
-["8.8.8.8", "8.8.4.4"]
-EOF
-  }
+resource "local_file" "kube_dns_cfg" {
+  depends_on = ["module.bootkube"]
+  content    = "${data.template_file.kube_dns_cfg.rendered}"
+  filename   = "${path.module}/${var.asset_dir}/manifests/kube-dns-cfg.yaml"
 }
