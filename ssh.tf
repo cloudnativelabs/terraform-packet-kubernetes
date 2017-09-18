@@ -14,7 +14,7 @@ resource "null_resource" "copy_secrets" {
 
   connection {
     type = "ssh"
-    host = "${element(null_resource.net.*.triggers.public_ipv4, count.index)}"
+    host = "${element(local.public_ipv4, count.index)}"
 
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
@@ -24,7 +24,7 @@ resource "null_resource" "copy_secrets" {
   provisioner "remote-exec" {
     inline = [
       "sudo cp /etc/hosts /etc/hosts-backup-$(date --utc --iso-8601=seconds)",
-      "echo '${join("\n",null_resource.hosts.*.triggers.entries)}' | sudo tee -a /etc/hosts",
+      "echo '${join("\n",local.hosts_entries)}' | sudo tee -a /etc/hosts",
     ]
   }
 
@@ -98,7 +98,7 @@ resource "null_resource" "bootkube_start" {
 
   connection {
     type        = "ssh"
-    host        = "${element(null_resource.net.*.triggers.public_ipv4, 0)}"
+    host        = "${element(local.public_ipv4, 0)}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -135,7 +135,7 @@ resource "null_resource" "cluster_start_controller" {
 
   connection {
     type        = "ssh"
-    host        = "${element(null_resource.net.*.triggers.public_ipv4, count.index + 1)}"
+    host        = "${element(local.public_ipv4, count.index + 1)}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -157,7 +157,7 @@ resource "null_resource" "cluster_start_worker" {
 
   connection {
     type        = "ssh"
-    host        = "${element(null_resource.net.*.triggers.public_ipv4, count.index + length(var.controller_count))}"
+    host        = "${element(local.public_ipv4, count.index + length(var.controller_count))}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"

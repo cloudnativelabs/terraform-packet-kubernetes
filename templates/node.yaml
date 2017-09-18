@@ -9,6 +9,31 @@ networkd:
         Unmanaged=true
 systemd:
   units:
+    - name: etcd-member.service
+      enable: ${enable_etcd_service}
+      dropins:
+        - name: 40-etcd-cluster.conf
+          contents: |
+            [Unit]
+            ConditionHost=controller-01*
+            [Service]
+            Environment="ETCD_IMAGE_TAG=v3.2.7"
+            Environment="ETCD_NAME=%H"
+            Environment="ETCD_ADVERTISE_CLIENT_URLS=https://%H:2379"
+            Environment="ETCD_INITIAL_ADVERTISE_PEER_URLS=https://%H:2380"
+            Environment="ETCD_LISTEN_CLIENT_URLS=https://0.0.0.0:2379"
+            Environment="ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380"
+            Environment="ETCD_INITIAL_CLUSTER=%H=https://%H:2380"
+            Environment="ETCD_STRICT_RECONFIG_CHECK=true"
+            Environment="ETCD_SSL_DIR=/etc/ssl/etcd"
+            Environment="ETCD_TRUSTED_CA_FILE=/etc/ssl/certs/etcd/server-ca.crt"
+            Environment="ETCD_CERT_FILE=/etc/ssl/certs/etcd/server.crt"
+            Environment="ETCD_KEY_FILE=/etc/ssl/certs/etcd/server.key"
+            Environment="ETCD_CLIENT_CERT_AUTH=true"
+            Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/certs/etcd/peer-ca.crt"
+            Environment="ETCD_PEER_CERT_FILE=/etc/ssl/certs/etcd/peer.crt"
+            Environment="ETCD_PEER_KEY_FILE=/etc/ssl/certs/etcd/peer.key"
+            Environment="ETCD_PEER_CLIENT_CERT_AUTH=true"
     - name: resolved-setup.service
       enable: true
       contents: |
@@ -399,7 +424,6 @@ storage:
         inline: |
           KUBELET_IMAGE_URL=quay.io/coreos/hyperkube
           KUBELET_IMAGE_TAG=v${kubernetes_v_patch}_coreos.0
-          KUBELET_IMAGE_TAG=v1.7.5_coreos.0
     - path: /etc/hostname
       filesystem: root
       mode: 0644
@@ -462,10 +486,11 @@ storage:
           # Wrapper for bootkube start
           set -e
           # Move experimental manifests
+          [ -d /opt/bootkube/assets/manifests-* ] && mv /opt/bootkube/assets/manifests-*/* /opt/bootkube/assets/manifests && rm -rf /opt/bootkube/assets/manifests-*
           [ -d /opt/bootkube/assets/experimental/manifests ] && mv /opt/bootkube/assets/experimental/manifests/* /opt/bootkube/assets/manifests && rm -r /opt/bootkube/assets/experimental/manifests
           [ -d /opt/bootkube/assets/experimental/bootstrap-manifests ] && mv /opt/bootkube/assets/experimental/bootstrap-manifests/* /opt/bootkube/assets/bootstrap-manifests && rm -r /opt/bootkube/assets/experimental/bootstrap-manifests
           BOOTKUBE_ACI="$${BOOTKUBE_ACI:-quay.io/coreos/bootkube}"
-          BOOTKUBE_VERSION="$${BOOTKUBE_VERSION:-v0.6.1}"
+          BOOTKUBE_VERSION="$${BOOTKUBE_VERSION:-v0.6.2}"
           BOOTKUBE_ASSETS="$${BOOTKUBE_ASSETS:-/opt/bootkube/assets}"
           exec /usr/bin/rkt run \
             --trust-keys-from-https \

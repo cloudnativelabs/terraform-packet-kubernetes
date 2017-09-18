@@ -1,5 +1,5 @@
 provider "kubernetes" {
-  config_path = "${module.bootkube.user-kubeconfig}"
+  config_path = "${var.asset_dir}/auth/test-config}"
   config_context = "test-context"
 }
 

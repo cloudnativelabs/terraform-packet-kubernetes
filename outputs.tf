@@ -7,7 +7,7 @@ output "api_hostname" {
 }
 
 output "node_public_ipv4" {
-  value = "${join("\n",null_resource.net.*.triggers.public_ipv4)}"
+  value = "${join("\n",local.public_ipv4)}"
 }
 
 output "kubeconfig_path" {
@@ -15,13 +15,13 @@ output "kubeconfig_path" {
 }
 
 output "kube_version_minor" {
-  value = "${null_resource.kubernetes_facts.triggers.kubernetes_v_minor}"
+  value = "${local.kubernetes_v_minor}"
 }
 
 output "kube_version_patch" {
-  value = "${null_resource.kubernetes_facts.triggers.kubernetes_v_patch}"
+  value = "${local.kubernetes_v_patch}"
 }
 
 output "hosts_file_entries" {
-  value = "${join("\n",null_resource.hosts.*.triggers.entries)}"
+  value = "${join("\n",local.hosts_entries)}"
 }
