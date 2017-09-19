@@ -78,7 +78,7 @@ variable cluster_name {
 }
 
 variable kubernetes_version {
-  default = "v1.7"
+  default = "v1.7.6"
 }
 
 variable asset_dir {
