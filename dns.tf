@@ -9,5 +9,5 @@ data "template_file" "kube_dns_cfg" {
 resource "local_file" "kube_dns_cfg" {
   depends_on = ["module.bootkube"]
   content    = "${data.template_file.kube_dns_cfg.rendered}"
-  filename   = "${path.module}/${var.asset_dir}/manifests/kube-dns-cfg.yaml"
+  filename   = "${path.module}/${var.asset_dir}/manifests-custom/kube-dns-cfg.yaml"
 }

@@ -15,5 +15,5 @@ resource "local_file" "kube_router" {
   count      = "${var.use_kube_router}"
   depends_on = ["module.bootkube"]
   content    = "${data.template_file.kube_router.rendered}"
-  filename   = "${path.module}/${var.asset_dir}/manifests-networking/kube-router.yaml"
+  filename   = "${path.module}/${var.asset_dir}/manifests-custom/kube-router.yaml"
 }

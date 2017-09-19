@@ -1,10 +1,10 @@
 # Write private SSH key to file for e2e, etc
 resource "local_file" "ssh_key_private" {
   content  = "${tls_private_key.ssh.private_key_pem}"
-  filename = "${path.module}/assets/auth/id_rsa"
+  filename = "${path.module}/assets/auth-custom/id_rsa"
 
   provisioner "local-exec" {
-    command = "chmod 600 ${path.module}/assets/auth/id_rsa"
+    command = "chmod 600 ${path.module}/assets/auth-custom/id_rsa"
   }
 }
 
