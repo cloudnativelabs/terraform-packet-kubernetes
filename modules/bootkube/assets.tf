@@ -26,6 +26,7 @@ resource "template_dir" "manifests" {
     pod_cidr            = "${var.pod_cidr}"
     service_cidr        = "${var.service_cidr}"
     kube_dns_service_ip = "${cidrhost(var.service_cidr, 10)}"
+    controller_count    = "${length(var.api_servers)}"
 
     ca_cert            = "${base64encode(var.ca_certificate == "" ? join(" ", tls_self_signed_cert.kube-ca.*.cert_pem) : var.ca_certificate)}"
     apiserver_key      = "${base64encode(tls_private_key.apiserver.private_key_pem)}"

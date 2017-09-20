@@ -24,6 +24,7 @@ spec:
         - /var/lock/api-server.lock
         - /hyperkube
         - apiserver
+        - --apiserver-count=${controller_count}
         - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota
         - --advertise-address=$(POD_IP)
         - --allow-privileged=true
