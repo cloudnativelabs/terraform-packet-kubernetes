@@ -25,3 +25,11 @@ output "kube_version_patch" {
 output "hosts_file_entries" {
   value = "${join("\n",local.hosts_entries)}"
 }
+
+output "termination_timestamp" {
+  value = "${local.termination_timestamps}"
+}
+
+output "termination_time_remaining" {
+  value = "${local.termination_time_remainings}"
+}

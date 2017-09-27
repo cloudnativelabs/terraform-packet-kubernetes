@@ -33,4 +33,8 @@ locals {
                                 concat(null_resource.controller.*.triggers.hostname_prefix,
                                        null_resource.worker.*.triggers.hostname_prefix),
                                 local.hostnames)}"
+  termination_timestamps = "${compact(concat(packet_device.controller.*.termination_timestamp,
+                                      packet_device.worker.*.termination_timestamp))}"
+  termination_time_remainings = "${compact(concat(packet_device.controller.*.termination_time_remaining,
+                                      packet_device.worker.*.termination_time_remaining))}"
 }

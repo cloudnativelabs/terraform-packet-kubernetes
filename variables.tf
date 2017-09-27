@@ -14,20 +14,19 @@ variable "project_id" {
 variable "spot_instance" {
   description = "Set to true to create a spot instance. See: https://help.packet.net/technical/deployment-options/spot-market"
   type        = "string"
-  default     = "false"
 }
 
 variable "spot_price_max" {
   description = "The bid price for your spot_instance."
   type        = "string"
+}
+
+variable "termination_time" {
+  description = "A predetermined time to delete your spot_instance. Takes RFC3339 (e.g. \"2018-09-21T19:20:01-05:00\") or duration (e.g. \"6h20m\") formats."
+  type        = "string"
   default     = ""
 }
 
-# variable "termination_time" {
-#   description = "A predetermined time to delete your spot_instance."
-#   type        = "string"
-#   default     = ""
-# }
 
 ## Machine
 variable operating_system {
@@ -91,7 +90,7 @@ variable etcd_servers {
 }
 
 variable experimental_self_hosted_etcd {
-  default = true
+  default = false
 }
 
 ## Customize Kubernetes components/addons
@@ -107,8 +106,4 @@ variable kube_router {
     service_proxy  = true
     network_policy = true
   }
-}
-
-variable use_prometheus {
-  default = true
 }
