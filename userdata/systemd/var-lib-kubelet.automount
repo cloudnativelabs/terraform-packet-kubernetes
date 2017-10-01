@@ -1,0 +1,13 @@
+[Unit]
+Requires=DATA.mount
+Wants=btrfs-create-subvolumes.service
+After=DATA.mount
+After=btrfs-create-subvolumes.service
+Before=kubelet.service
+
+[Automount]
+Where=/var/lib/kubelet
+
+[Install]
+WantedBy=local-fs.target
+WantedBy=kubelet.service

@@ -34,37 +34,37 @@ resource "null_resource" "copy_secrets" {
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_ca_cert}"
+    content     = "${module.etcd.ca_cert}"
     destination = "$HOME/etcd-client-ca.crt"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_client_cert}"
+    content     = "${module.etcd.client_cert}"
     destination = "$HOME/etcd-client.crt"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_client_key}"
+    content     = "${module.etcd.client_key}"
     destination = "$HOME/etcd-client.key"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_server_cert}"
+    content     = "${module.etcd.server_cert}"
     destination = "$HOME/etcd-server.crt"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_server_key}"
+    content     = "${module.etcd.server_key}"
     destination = "$HOME/etcd-server.key"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_peer_cert}"
+    content     = "${module.etcd.peer_cert}"
     destination = "$HOME/etcd-peer.crt"
   }
 
   provisioner "file" {
-    content     = "${module.bootkube.etcd_peer_key}"
+    content     = "${module.etcd.peer_key}"
     destination = "$HOME/etcd-peer.key"
   }
 
@@ -115,6 +115,15 @@ resource "null_resource" "bootkube_start" {
       "sudo systemctl start kubelet.service",
       "sudo systemctl restart kubelet.path",
       "sleep 15",
+      /* "sudo rm -rf /home/core/assets/tls/etcd", */
+      /* "sudo cp /etc/ssl/etcd/etcd-client-ca.crt /home/core/assets/tls/etcd/etcd-client-ca.crt", */
+      /* "sudo chown coreos:coreos/home/core/assets/tls/etcd/etcd-client-ca.crt", */
+      /* "sudo cp /etc/ssl/etcd/etcd-client.crt /home/core/assets/tls/etcd/etcd-client.crt", */
+      /* "sudo chown coreos:coreos/home/core/assets/tls/etcd/etcd-client.crt", */
+      /* "sudo cp /etc/ssl/etcd/etcd-client.key /home/core/assets/tls/etcd/etcd-client.key", */
+      /* "sudo chown coreos:coreos/home/core/assets/tls/etcd/etcd-client.key", */
+      /* "sudo cp -r /etc/ssl/etcd/etcd /home/core/assets/tls/etcd", */
+      /* "sudo chown -R coreos:coreos/home/core/assets/tls/etcd", */
       "sudo mv /home/core/assets /opt/bootkube",
       "sudo systemctl start bootkube",
     ]

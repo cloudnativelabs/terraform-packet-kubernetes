@@ -1,0 +1,11 @@
+[Unit]
+ConditionPathIsSymbolicLink=/dev/disk/by-label/DATA
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/DATA
+Type=btrfs
+Options=compress=lzo,subvol=/
+
+[Install]
+WantedBy=local-fs.target

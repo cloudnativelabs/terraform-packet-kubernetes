@@ -1,0 +1,13 @@
+[Unit]
+Requires=DATA.mount
+Wants=btrfs-create-subvolumes.service
+After=DATA.mount
+After=btrfs-create-subvolumes.service
+Before=docker.service
+
+[Automount]
+Where=/var/lib/docker
+
+[Install]
+WantedBy=docker.service
+WantedBy=local-fs.target

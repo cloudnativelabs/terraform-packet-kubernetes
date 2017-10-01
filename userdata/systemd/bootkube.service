@@ -1,0 +1,10 @@
+[Unit]
+Description=Bootstrap a Kubernetes control plane with a temp api-server
+ConditionPathExists=!/opt/bootkube/init_bootkube.done
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/opt/bootkube
+ExecStart=/opt/bootkube/bootkube-start
+ExecStartPost=/bin/touch /opt/bootkube/init_bootkube.done

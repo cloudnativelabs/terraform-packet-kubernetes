@@ -1,0 +1,13 @@
+[Unit]
+Description=systemd-resolved custom configuration
+Before=systemd-resolved.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/bin/mkdir -p /etc/systemd/resolved.conf.d
+ExecStart=/usr/bin/ln -sf /dev/null /etc/systemd/resolved.conf.d/50-no-dns-listener.conf
+ExecStart=/usr/bin/ln -sf /usr/lib/systemd/resolv.conf /etc/resolv.conf
+
+[Install]
+WantedBy=systemd-resolved.service

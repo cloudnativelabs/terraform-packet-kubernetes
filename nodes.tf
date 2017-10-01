@@ -12,7 +12,7 @@ resource "packet_device" "controller" {
   operating_system = "${var.operating_system}"
   billing_cycle    = "hourly"
   project_id       = "${var.project_id}"
-  user_data        = "${data.ct_config.controller.*.rendered[count.index]}"
+  user_data        = "${data.ignition_config.controller.rendered}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = "${var.always_pxe}"
   spot_instance    = "${var.spot_instance}"
@@ -30,7 +30,7 @@ resource "packet_device" "worker" {
   operating_system = "${var.operating_system}"
   billing_cycle    = "hourly"
   project_id       = "${var.project_id}"
-  user_data        = "${data.ct_config.worker.*.rendered[count.index]}"
+  user_data        = "${data.ignition_config.worker.rendered}"
   ipxe_script_url  = "${var.ipxe_script_url}"
   always_pxe       = "${var.always_pxe}"
   spot_instance    = "${var.spot_instance}"
@@ -45,40 +45,4 @@ resource "packet_ssh_key" "ssh" {
 
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
-}
-
-data "ct_config" "controller" {
-  count        = "${var.controller_count}"
-  pretty_print = true
-  content      = "${data.template_file.controller.*.rendered[count.index]}"
-}
-
-data "ct_config" "worker" {
-  count        = "${var.worker_count}"
-  pretty_print = true
-  content      = "${data.template_file.worker.*.rendered[count.index]}"
-}
-
-data "template_file" "controller" {
-  count    = "${var.controller_count}"
-  template = "${file("${path.module}/templates/node.yaml")}"
-
-  vars {
-    node_name   = "${format("controller-%02d", count.index + 1)}"
-    node_labels = "node-role.kubernetes.io/master"
-    kubernetes_v_patch = "${local.kubernetes_v_patch}"
-    enable_etcd_service = "${var.experimental_self_hosted_etcd || length(var.etcd_servers) > 0 ? "false" : "true"}"
-  }
-}
-
-data "template_file" "worker" {
-  count    = "${var.worker_count}"
-  template = "${file("${path.module}/templates/node.yaml")}"
-
-  vars {
-    node_name   = "${format("worker-%02d", count.index + 1)}"
-    node_labels = ""
-    kubernetes_v_patch = "${local.kubernetes_v_patch}"
-    enable_etcd_service = "false"
-  }
 }

@@ -1,0 +1,5 @@
+[Automount]
+Where=/DATA
+
+[Install]
+WantedBy=local-fs.target

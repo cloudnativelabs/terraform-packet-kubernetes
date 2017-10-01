@@ -1,0 +1,19 @@
+[Unit]
+Description=Initial BTRFS subvolume creation
+RequiresMountsFor=/DATA
+ConditionDirectoryNotEmpty=!/DATA
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/docker
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/rkt
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/etcd
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/kubernetes
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/core
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/kubelet
+ExecStart=/usr/sbin/btrfs subvolume create /DATA/ssl-etcd
+ExecStart=/usr/bin/chown -R core:core /DATA/core
+
+[Install]
+WantedBy=multi-user.target

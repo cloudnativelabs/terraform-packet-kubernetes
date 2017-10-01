@@ -1,0 +1,8 @@
+[Unit]
+Before=kubelet.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/var/lib/kubelet
+Type=btrfs
+Options=compress=lzo,subvol=/kubelet

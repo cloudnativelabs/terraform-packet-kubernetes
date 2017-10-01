@@ -1,0 +1,13 @@
+[Unit]
+Requires=DATA.mount
+Wants=btrfs-create-subvolumes.service
+After=DATA.mount
+After=btrfs-create-subvolumes.service
+Before=rkt-gc.service rkt-metadata.service
+
+[Automount]
+Where=/var/lib/rkt
+
+[Install]
+WantedBy=rkt-gc.service rkt-metadata.service
+WantedBy=local-fs.target

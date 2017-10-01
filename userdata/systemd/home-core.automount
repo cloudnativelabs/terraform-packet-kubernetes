@@ -1,0 +1,12 @@
+[Unit]
+Wants=btrfs-create-subvolumes.service
+After=DATA.mount
+After=btrfs-create-subvolumes.service
+Before=coreos-metadata-sshkeys@core.service
+
+[Automount]
+Where=/home/core
+
+[Install]
+WantedBy=local-fs.target
+WantedBy=coreos-metadata-sshkeys@core.service

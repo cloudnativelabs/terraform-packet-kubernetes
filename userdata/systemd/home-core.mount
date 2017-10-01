@@ -1,0 +1,8 @@
+[Unit]
+Before=coreos-metadata-sshkeys@core.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/home/core
+Type=btrfs
+Options=compress=lzo,subvol=/core

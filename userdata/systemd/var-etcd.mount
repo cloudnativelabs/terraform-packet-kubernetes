@@ -1,0 +1,9 @@
+[Unit]
+Before=kubelet.service
+Before=etcd-member.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/var/etcd
+Type=btrfs
+Options=compress=lzo,subvol=/etcd

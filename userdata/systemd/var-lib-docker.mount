@@ -1,0 +1,8 @@
+[Unit]
+Before=docker.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/var/lib/docker
+Type=btrfs
+Options=compress=lzo,subvol=/docker

@@ -1,0 +1,12 @@
+[Unit]
+Wants=btrfs-create-subvolumes.service
+After=DATA.mount
+After=btrfs-create-subvolumes.service
+Before=kubelet.service bootkube.service
+
+[Automount]
+Where=/etc/ssl/etcd
+
+[Install]
+WantedBy=local-fs.target
+WantedBy=kubelet.service bootkube.service

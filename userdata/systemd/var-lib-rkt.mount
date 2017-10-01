@@ -1,0 +1,8 @@
+[Unit]
+Before=rkt-gc.service rkt-metadata.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/var/lib/rkt
+Type=btrfs
+Options=compress=lzo,subvol=/rkt

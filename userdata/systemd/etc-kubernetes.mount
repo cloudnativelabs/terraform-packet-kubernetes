@@ -1,0 +1,8 @@
+[Unit]
+Before=kubelet.service bootkube.service
+
+[Mount]
+What=/dev/disk/by-label/DATA
+Where=/etc/kubernetes
+Type=btrfs
+Options=compress=lzo,subvol=/kubernetes

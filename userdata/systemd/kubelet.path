@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch for kubeconfig
+
+[Path]
+PathExists=/etc/kubeconfig
+
+[Install]
+WantedBy=multi-user.target
