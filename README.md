@@ -28,9 +28,8 @@ Make sure you have a `~/.terraformrc` that uses the new provider binaries. You
 can run the following:
 ```sh
 cat <<EOF > ~/.terraformrc
-providers {                                          
-  ct = "${GOPATH}/bin/terraform-provider-ct"         
-  packet = "${GOPATH}/bin/terraform-provider-packet" 
+providers {
+  packet = "${GOPATH}/bin/terraform-provider-packet"
 }
 EOF
 ```
@@ -76,7 +75,7 @@ instructions](#quickstart).
 
 ### Prerequisites
 
-kube-metal uses a few unreleased features from Terraform providers. You can get
+kube-metal uses unreleased features from Terraform providers. You can get
 them automatically with the provided [get-providers.sh](/tools/get-providers.sh)
 script.
 
@@ -86,9 +85,8 @@ tools/get-providers.sh
 
 Then create a file `~/terraformrc` and add the following:
 ```
-providers {                                          
-  ct = "${GOPATH}/bin/terraform-provider-ct"         
-  packet = "${GOPATH}/bin/terraform-provider-packet" 
+providers {
+  packet = "${GOPATH}/bin/terraform-provider-packet"
 }
 ```
 
