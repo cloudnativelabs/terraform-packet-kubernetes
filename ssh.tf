@@ -1,32 +1,22 @@
-# Write private SSH key to file for e2e, etc
-resource "local_file" "ssh_key_private" {
-  content  = "${tls_private_key.ssh.private_key_pem}"
-  filename = "${path.module}/assets/auth-custom/id_rsa"
-
-  provisioner "local-exec" {
-    command = "chmod 600 ${path.module}/assets/auth-custom/id_rsa"
-  }
-}
-
 # Secure copy etcd TLS assets and kubeconfig to all nodes.
 resource "null_resource" "copy_secrets" {
   count = "${var.controller_count + var.worker_count}"
 
   connection {
     type = "ssh"
-    host = "${element(local.public_ipv4, count.index)}"
+    host = "${local.hosts[count.index]}"
 
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo cp /etc/hosts /etc/hosts-backup-$(date --utc --iso-8601=seconds)",
-      "echo '${join("\n",local.hosts_entries)}' | sudo tee -a /etc/hosts",
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo cp /etc/hosts /etc/hosts-backup-$(date --utc --iso-8601=seconds)",
+  #     "echo '${join("\n",local.hosts_entries)}' | sudo tee -a /etc/hosts",
+  #   ]
+  # }
 
   provisioner "file" {
     content     = "${module.bootkube.kubeconfig}"
@@ -98,7 +88,7 @@ resource "null_resource" "bootkube_start" {
 
   connection {
     type        = "ssh"
-    host        = "${element(local.public_ipv4, 0)}"
+    host        = "${local.controller_hosts[0]}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -115,6 +105,7 @@ resource "null_resource" "bootkube_start" {
       "sudo systemctl start kubelet.service",
       "sudo systemctl restart kubelet.path",
       "sleep 15",
+
       /* "sudo rm -rf /home/core/assets/tls/etcd", */
       /* "sudo cp /etc/ssl/etcd/etcd-client-ca.crt /home/core/assets/tls/etcd/etcd-client-ca.crt", */
       /* "sudo chown coreos:coreos/home/core/assets/tls/etcd/etcd-client-ca.crt", */
@@ -125,6 +116,7 @@ resource "null_resource" "bootkube_start" {
       /* "sudo cp -r /etc/ssl/etcd/etcd /home/core/assets/tls/etcd", */
       /* "sudo chown -R coreos:coreos/home/core/assets/tls/etcd", */
       "sudo mv /home/core/assets /opt/bootkube",
+
       "sudo systemctl start bootkube",
     ]
   }
@@ -144,7 +136,7 @@ resource "null_resource" "cluster_start_controller" {
 
   connection {
     type        = "ssh"
-    host        = "${element(local.public_ipv4, count.index + 1)}"
+    host        = "${local.controller_hosts[count.index + 1]}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"
@@ -166,7 +158,7 @@ resource "null_resource" "cluster_start_worker" {
 
   connection {
     type        = "ssh"
-    host        = "${element(local.public_ipv4, count.index + length(var.controller_count))}"
+    host        = "${local.worker_hosts[count.index]}"
     user        = "core"
     private_key = "${tls_private_key.ssh.private_key_pem}"
     timeout     = "20m"

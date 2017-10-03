@@ -14,10 +14,8 @@ resource "null_resource" "worker" {
   }
 }
 
+# Common
 locals {
-  public_ipv4 = "${concat(packet_device.controller.*.access_public_ipv4,
-                          packet_device.worker.*.access_public_ipv4)}"
-
   controller_hostnames = "${formatlist("%v.%v",
                                         null_resource.controller.*.triggers.hostname_prefix,
                                         var.server_domain)}"
@@ -28,13 +26,25 @@ locals {
 
   hostnames = "${concat(local.controller_hostnames, local.worker_hostnames)}"
 
-  hosts_entries = "${formatlist("%v %v %v",
-                                local.public_ipv4,
-                                concat(null_resource.controller.*.triggers.hostname_prefix,
-                                       null_resource.worker.*.triggers.hostname_prefix),
-                                local.hostnames)}"
-  termination_timestamps = "${compact(concat(packet_device.controller.*.termination_timestamp,
-                                      packet_device.worker.*.termination_timestamp))}"
-  termination_time_remainings = "${compact(concat(packet_device.controller.*.termination_time_remaining,
-                                      packet_device.worker.*.termination_time_remaining))}"
+  public_ipv4 = "${concat(var.controller_ipv4_public,
+                          var.worker_ipv4_public)}"
+
+  # hosts_entries = "${formatlist("%v %v %v",
+  #                               local.public_ipv4,
+  #                               concat(null_resource.controller.*.triggers.hostname_prefix,
+  #                                      null_resource.worker.*.triggers.hostname_prefix),
+  #                               local.hostnames)}"
+
+  controller_hosts_strings = "${length(var.controller_ipv4_public) != var.controller_count
+    ? join(",", local.controller_hostnames)
+    : join(",", var.controller_ipv4_public)}"
+
+  worker_hosts_strings = "${length(var.worker_ipv4_public) != var.worker_count
+    ? join(",", local.worker_hostnames)
+    : join(",", var.worker_ipv4_public)}"
+
+  controller_hosts = "${split(",", local.controller_hosts_strings)}"
+  worker_hosts = "${split(",", local.worker_hosts_strings)}"
+
+  hosts = "${concat(local.controller_hosts, local.worker_hosts)}"
 }

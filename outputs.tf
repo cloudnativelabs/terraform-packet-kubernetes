@@ -1,9 +1,9 @@
 output "api_ip" {
-  value = "${lookup(packet_device.controller.0.network[0], "address")}"
+  value = "${local.public_ipv4[0]}"
 }
 
 output "api_hostname" {
-  value = "${packet_device.controller.0.hostname}"
+  value = "${local.controller_hostnames[0]}"
 }
 
 output "node_public_ipv4" {
@@ -22,9 +22,9 @@ output "kube_version_patch" {
   value = "${local.kubernetes_v_patch}"
 }
 
-output "hosts_file_entries" {
-  value = "${join("\n",local.hosts_entries)}"
-}
+# output "hosts_file_entries" {
+#   value = "${join("\n",local.hosts_entries)}"
+# }
 
 output "termination_timestamp" {
   value = "${local.termination_timestamps}"

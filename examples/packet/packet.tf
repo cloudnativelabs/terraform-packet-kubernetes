@@ -46,3 +46,14 @@ resource "packet_ssh_key" "ssh" {
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
 }
+
+locals {
+  public_ipv4 = "${concat(packet_device.controller.*.access_public_ipv4,
+                          packet_device.worker.*.access_public_ipv4)}"
+
+  termination_timestamps = "${compact(concat(packet_device.controller.*.termination_timestamp,
+                                      packet_device.worker.*.termination_timestamp))}"
+
+  termination_time_remainings = "${compact(concat(packet_device.controller.*.termination_time_remaining,
+                                      packet_device.worker.*.termination_time_remaining))}"
+}

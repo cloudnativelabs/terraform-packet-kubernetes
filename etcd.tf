@@ -1,10 +1,11 @@
 module "etcd" {
   source = "github.com/cloudnativelabs/terraform-ignition-etcd-member"
 
-  unit_options          = ["ConditionHost=controller-01*"]
-  client_advertise_fqdn = ["controller-01.${var.server_domain}"]
-  peer_advertise_fqdn   = ["controller-01.${var.server_domain}"]
-  name                  = "controller-01.${var.server_domain}"
+  unit_options          = ["${format("ConditionHost=%s*",
+    null_resource.controller.*.triggers.hostname_prefix[0])}"]
+  client_advertise_fqdn = ["local.controller_hostnames[0]"]
+  peer_advertise_fqdn   = ["local.controller_hostnames[0]"]
+  name                  = "local.controller_hostnames[0]"
   write_files           = true
   asset_dir             = "${var.asset_dir}"
 }

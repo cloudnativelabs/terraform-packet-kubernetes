@@ -1,7 +1,7 @@
 module "bootkube" {
   source                        = "github.com/cloudnativelabs/bootkube-terraform"
   cluster_name                  = "${var.cluster_name}"
-  api_servers                   = "${packet_device.controller.*.hostname}"
+  api_servers                   = "${local.controller_hostnames}"
   asset_dir                     = "${var.asset_dir}"
   networking                    = "${var.kube_router["pod_networking"] ? "kube-router" : "flannel"}"
   kube_router                   = "${var.kube_router}"

@@ -1,74 +1,27 @@
-# vim: foldmethod=indent
-
-## Provider
-variable "auth_token" {
-  description = "Secret key/password for your provider."
-  type        = "string"
-}
-
-variable "project_id" {
-  description = "Project ID"
-  type        = "string"
-}
-
-variable "spot_instance" {
-  description = "Set to true to create a spot instance. See: https://help.packet.net/technical/deployment-options/spot-market"
-  type        = "string"
-}
-
-variable "spot_price_max" {
-  description = "The bid price for your spot_instance."
-  type        = "string"
-}
-
-variable "termination_time" {
-  description = "A predetermined time to delete your spot_instance. Takes RFC3339 (e.g. \"2018-09-21T19:20:01-05:00\") or duration (e.g. \"6h20m\") formats."
-  type        = "string"
-  default     = ""
-}
-
-
-## Machine
-variable operating_system {
-  description = "The operating system to provision servers with."
-  type        = "string"
-  default     = "custom_ipxe"
-}
-
-variable ipxe_script_url {
-  description = "URL that points to an iPXE script to boot."
-  type        = "string"
-  default     = "https://raw.githubusercontent.com/cloudnativelabs/pxe/master/packet/coreos-alpha-packet.ipxe"
-}
-
-variable always_pxe {
-  description = "If true then the servers will boot via iPXE on reboots."
-  type        = "string"
-  default     = "true"
-}
-
-variable server_type {
-  default = "baremetal_0"
-}
-
-variable facility {
-  default = "ewr1"
-}
-
 variable controller_count {
   description = "How many kubernetes controller servers to create."
-  type        = "string"
 }
 
 variable worker_count {
   description = "How many kubernetes worker servers to create."
-  type        = "string"
 }
 
 variable server_domain {
   description = "Domain to append to server hostnames."
   type        = "string"
   default     = "localdomain"
+}
+
+variable "controller_ipv4_public" {
+  description = ""
+  type        = "list"
+  default     = []
+}
+
+variable "worker_ipv4_public" {
+  description = ""
+  type        = "list"
+  default     = []
 }
 
 ## Bootkube

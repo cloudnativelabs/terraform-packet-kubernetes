@@ -169,7 +169,7 @@ data "ignition_file" "controller_etc_hostname" {
   mode       = "0644"
 
   content {
-    content = "${format("controller-%02d.%s", count.index + 1, var.server_domain)}"
+    content = "${local.controller_hostnames[count.index]}"
   }
 }
 
@@ -180,7 +180,7 @@ data "ignition_file" "worker_etc_hostname" {
   mode       = "0644"
 
   content {
-    content = "${format("worker-%02d.%s", count.index + 1, var.server_domain)}"
+    content = "${local.worker_hostnames[count.index]}"
   }
 }
 
