@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: kube-router
-        image: cloudnativelabs/kube-router-git:master
+        image: cloudnativelabs/kube-router
         imagePullPolicy: IfNotPresent
         args:
         - --run-router=${pod_networking}
