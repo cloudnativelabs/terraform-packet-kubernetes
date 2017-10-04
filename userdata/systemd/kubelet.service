@@ -29,6 +29,7 @@ ExecStart=/usr/lib/coreos/kubelet-wrapper \
   --pod-manifest-path=/etc/kubernetes/manifests \
   --allow-privileged \
   --hostname-override=%H \
+  --pod-cidr=10.2.0.0/16 \
   --cluster_dns=10.3.0.10 \
   --cluster_domain=cluster.local
 ExecStop=-/usr/bin/rkt stop --uuid-file=/var/run/kubelet-pod.uuid
