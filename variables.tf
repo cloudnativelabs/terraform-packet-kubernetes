@@ -14,11 +14,13 @@ variable "project_id" {
 variable "spot_instance" {
   description = "Set to true to create a spot instance. See: https://help.packet.net/technical/deployment-options/spot-market"
   type        = "string"
+  default     = "false"
 }
 
 variable "spot_price_max" {
   description = "The bid price for your spot_instance."
   type        = "string"
+  default     = "0.0"
 }
 
 variable "termination_time" {
