@@ -7,7 +7,7 @@ resource "null_resource" "copy_secrets" {
     host = "${local.hosts[count.index]}"
 
     user        = "core"
-    private_key = "${tls_private_key.ssh.private_key_pem}"
+    /* private_key = "${tls_private_key.ssh.private_key_pem}" */
     timeout     = "20m"
   }
 
@@ -90,7 +90,7 @@ resource "null_resource" "bootkube_start" {
     type        = "ssh"
     host        = "${local.controller_hosts[0]}"
     user        = "core"
-    private_key = "${tls_private_key.ssh.private_key_pem}"
+    /* private_key = "${tls_private_key.ssh.private_key_pem}" */
     timeout     = "20m"
   }
 
@@ -138,7 +138,7 @@ resource "null_resource" "cluster_start_controller" {
     type        = "ssh"
     host        = "${local.controller_hosts[count.index + 1]}"
     user        = "core"
-    private_key = "${tls_private_key.ssh.private_key_pem}"
+    /* private_key = "${tls_private_key.ssh.private_key_pem}" */
     timeout     = "20m"
   }
 
@@ -160,7 +160,7 @@ resource "null_resource" "cluster_start_worker" {
     type        = "ssh"
     host        = "${local.worker_hosts[count.index]}"
     user        = "core"
-    private_key = "${tls_private_key.ssh.private_key_pem}"
+    /* private_key = "${tls_private_key.ssh.private_key_pem}" */
     timeout     = "20m"
   }
 
