@@ -1,8 +1,8 @@
-variable equality_condition_left {
+variable if {
   description = ""
 }
 
-variable equality_condition_right {
+variable equals {
   description = ""
 }
 

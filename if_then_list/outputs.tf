@@ -1,5 +1,4 @@
 output result {
-  /* value = "${null_resource.result.triggers.split}" */
   value = "${local.result}"
 }
 
@@ -8,10 +7,10 @@ locals {
   else_string = "${join(var.separator, var.else)}"
 
   result_string = "${
-    var.equality_condition_left == var.equality_condition_right
+    var.if == var.equals
       ? local.then_string
       : local.else_string
   }"
 
-  result = "${split(var.separator, local.result_string)}"
+  result = "${compact(split(var.separator, local.result_string))}"
 }
