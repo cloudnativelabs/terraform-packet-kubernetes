@@ -5,6 +5,7 @@ script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 tf_dir="$(dirname ${script_dir})"
 terraform_output="terraform output --state=${tf_dir}/terraform.tfstate"
 
+[ -z "${KUBE_VERSION}" ] && KUBE_VERSION="1.8"
 # [ -z "${E2E_SKIP}" ] && E2E_SKIP="Disruptive|Kubectl"
 [ -z "${E2E_SKIP}" ] && E2E_SKIP="(?i)\[k8s.io\] (Kubectl)|\[Disruptive\]|\[Experimental\]|\[HPA\]"
 # [ -z "${E2E_FOCUS}" ] && E2E_FOCUS="Conformance"
@@ -45,7 +46,7 @@ docker run \
     --env KUBERNETES_CONFORMANCE_TEST \
     --env GINKGO_PARALLEL \
     ${add_host_flag} \
-    quay.io/cloudnativelabs/kube-conformance:v1.7 \
+    "quay.io/cloudnativelabs/kube-conformance:v${KUBE_VERSION}" \
         /usr/local/bin/e2e.test \
         --disable-log-dump="true" \
         --dump-logs-on-failure="false" \
