@@ -1,0 +1,4 @@
+equality_condition_left  = "equal"
+equality_condition_right = "noequal"
+then = ["then", "list"]
+else = ["else", "list", "else"]
