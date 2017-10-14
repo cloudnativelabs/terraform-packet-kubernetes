@@ -1,3 +1,4 @@
 data ignition_config main {
-  links = ["${compact(null_resource.builtins_enabled.*.triggers.links)}"]
+  links = ["${local.builtins_enabled_links}"]
+  systemd = ["${local.builtins_enabled_systemd}"]
 }
