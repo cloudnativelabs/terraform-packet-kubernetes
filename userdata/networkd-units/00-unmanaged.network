@@ -1,5 +1,0 @@
-[Match]
-Name=dummy0 kube-dummy-if kube-bridge cni*
-
-[Link]
-Unmanaged=true
