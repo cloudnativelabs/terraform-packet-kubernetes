@@ -1,0 +1,5 @@
+[Match]
+Name=dummy0 kube-dummy-if kube-bridge cni* cbr0 calico*
+
+[Link]
+Unmanaged=true
